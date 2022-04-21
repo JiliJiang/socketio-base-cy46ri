@@ -25,6 +25,11 @@ const io = new Server(httpServer, {
 
 io.on('connection', socket => {
   console.log(`connect ${socket.id}`);
+  socket.emit("ping","pong")
+
+  socket.on("ping", (args)=>{
+    console.log(args)
+  })
 
   socket.on('disconnect', reason => {
     console.log(`disconnect ${socket.id} due to ${reason}`);

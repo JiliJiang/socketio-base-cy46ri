@@ -10,8 +10,10 @@
   <h2>Status: <span id="status">Disconnected</span></h2>
   <h2>Messages:</h2>
   <ul id="messages"></ul>
+  <p id="pong"></p>
 
-  <script src="/socket.io/socket.io.js"></script>
+  <!-- <script src="/socket.io/socket.io.js"></script> -->
+
   <script>
     const status = document.getElementById('status');
       const messages = document.getElementById('messages');
@@ -22,14 +24,22 @@
         messages.appendChild(item);
       };
 
-      const socket = io({
+      const socket = io(
+        "localhost:3000", {
         // Socket.IO options
       });
 
       socket.on('connect', () => {
         status.innerText = 'Connected';
         appendMessage(`event: connect | session id: ${socket.id}`);
+
       });
+      
+      socket.on("ping", (arg)=>{
+        document.getElementById('pong').innerHTML=`${arg}`
+      })
+
+      socket.emit("ping","pong")
 
       socket.on('connect_error', err => {
         appendMessage(`event: connect_error | reason: ${err.message}`);
